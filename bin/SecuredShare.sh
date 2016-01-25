@@ -20,6 +20,18 @@ export MAIN_DIALOG='
 	    </button>
 	  </hbox>
      </frame>
+     <frame Select JPEG File>
+	  <hbox>
+	    <entry>
+	      <variable>JFILE</variable>
+	    </entry>
+	    <button>
+	      <input file stock="gtk-open"></input>
+	      <variable>FILE_BROWSE</variable>
+	      <action type="fileselect">JFILE</action>
+	    </button>
+	  </hbox>
+     </frame>
     
       <frame Select Output Directory>
 	<hbox>
@@ -39,7 +51,7 @@ export MAIN_DIALOG='
 	  <height>20</height>
 	  <width>40</width>
 	  <label>Encrypt</label>
-	  <action signal="clicked">clear; java main.UserInput "$FILE" "$FILE_DIRECTORY"</action>
+	  <action signal="clicked">clear; java main.UserInput "$FILE" "$JFILE" "$FILE_DIRECTORY"</action>
 	  <variable>"flag"</variable>
 	</button>
       </vbox>
@@ -72,32 +84,19 @@ export MAIN_DIALOG='
       <vbox>         
       <expander label="Decryption" expanded="true">
 	<vbox>
-	<frame Choose Cipher>
+	<frame Choose Steg Image>
 	    <hbox>
 	      <entry>
-		<variable>CFILE</variable>
+		<variable>IFILE</variable>
 	      </entry>
 	      <button>
 		<input file stock="gtk-open"></input>
-		<variable>cfile</variable>
-		<action type="fileselect">CFILE</action>
+		<variable>ifile</variable>
+		<action type="fileselect">IFILE</action>
 	      </button>
 	    </hbox>
-	  </frame>
-	  
-	  <frame Choose Appropriate key>
-	    <hbox>
-	      <entry>
-		<variable>KFILE</variable>
-	      </entry>
-	      <button>
-		<input file stock="gtk-open"></input>
-		<variable>kfile</variable>
-		<action type="fileselect">KFILE</action>
-	      </button>
-	    </hbox>
-	  </frame>	
-	  
+	  </frame>	  
+	  	  
 	 <frame Select Output Directory>
 	<hbox>
 	  <entry accept="directory">
@@ -116,7 +115,7 @@ export MAIN_DIALOG='
 	      <height>20</height>
 	      <width>40</width>
 	      <label>Decrypt</label>
-	      <action signal="clicked">clear;java crypto.Decrypt "$CFILE" "$KFILE" "$DIR"</action>
+	      <action signal="clicked">clear;java crypto.Decrypt "$IFILE" "$DIR"</action>
 	    </button>
 	  </vbox>
 	 </vbox>

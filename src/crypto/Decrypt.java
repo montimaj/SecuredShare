@@ -10,7 +10,9 @@ import javax.crypto.spec.SecretKeySpec;
 
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
+import stegano.DoStegano;
 import util.Log;
+import util.Unzip;
 import util.FileOperations;
 /**
  * Decrypt a cipher text
@@ -47,34 +49,33 @@ public class Decrypt {
 	 * Main module
 	 * @param args input arguments where
 	 * <p>
-	 * args[0]-> cipher
-	 * args[1]-> secret key
-	 * args[2]-> output directory
+	 * args[0]-> steg image
+	 * args[1]-> output directory
 	 * @throws InterruptedException
 	 * @throws IOException
 	 */
-	public static void main(String[] args) throws InterruptedException, IOException
-	{
+	public static void main(String[] args) throws InterruptedException, IOException	{
 		Process p=null;
-		try
-		{			
-			if(args.length<3 || args[0].isEmpty() || args[1].isEmpty() || args[2].isEmpty())
+		try	{			
+			if(args.length<2 || args[0].isEmpty() || args[1].isEmpty())
 				throw new IOException("Invalid input");	
 			String[] x={"zenity","--progress","--pulsate","--no-cancel","--text=Decrypting..."};
 			p=new ProcessBuilder(x).start();
-			doDecrypt(args[0], args[1], args[2]);
+			String zipFile=new DoStegano(args[0], args[1]).getExtractedFile();
+			String extractedFiles[]=Unzip.unzip(zipFile,args[1]);
+			doDecrypt(extractedFiles[0],extractedFiles[1], args[1]);
 			p.destroy();
 			String x1[]={"zenity","--info","--title=Result","--text=Done!"};
 			p=new ProcessBuilder(x1).start();
 			p.waitFor();			
-		}		
-		catch(Exception e)
-		{
+		}catch(Exception e)	{
 			if(p!=null)
 				p.destroy();
-			String s=Log.createLog(args[2],e), x[]={"zenity","--error","--text="+s};
+			String s=Log.createLog(args[1],e), x[]={"zenity","--error","--text="+s};
 			p=new ProcessBuilder(x).start();
 			p.waitFor();
+		}finally {
+			FileOperations.deleteFiles(args[1]+"/extracted.zip");
 		}
 	}
 }

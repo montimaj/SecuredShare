@@ -76,7 +76,7 @@ public class FileOperations {
 	 * Deletes files
 	 * @param files Files to be deleted
 	 */
-	public static void deleteFiles(String files[]) {
+	public static void deleteFiles(String... files) {
 		for(int i=0;i<files.length;++i)
 			new File(files[i]).delete();
 	}
